@@ -40,22 +40,22 @@ for inp in Saved/*.avi
 do
     rm "$TMPDIR"/*
 
-	name=`basename $inp | sed 's/\.avi$//' `
+    name=`basename $inp | sed 's/\.avi$//' `
     echo "name=$name"
 
     # split input video $inp into audio and video files.
-	$ECHO bin/ffmpeg -i "$inp" -vcodec copy -an "$TMPDIR/inp_video.avi"   # extract the video (just copy it - not reencode) and -an = NO audio
-	$ECHO bin/ffmpeg -i "$inp" "$TMPDIR/inp_audio.wav"                    # extract the audio into a .wav format file (no compression)
+    $ECHO bin/ffmpeg -i "$inp" -vcodec copy -an "$TMPDIR/inp_video.avi"   # extract the video (just copy it - not reencode) and -an = NO audio
+    $ECHO bin/ffmpeg -i "$inp" "$TMPDIR/inp_audio.wav"                    # extract the audio into a .wav format file (no compression)
 
-	$ECHO bin/sox "$TMPDIR/inp_audio.wav" "$TMPDIR/out_audio.wav" pitch $PITCH   # Adjust audio pitch
+    $ECHO bin/sox "$TMPDIR/inp_audio.wav" "$TMPDIR/out_audio.wav" pitch $PITCH   # Adjust audio pitch
 
-	# bin/ffmpeg -i "$TMPDIR/input.avi" -i "$TMPDIR/output.wav" -vcodec copy "$OUTDIR/$name.mpg"
+    # bin/ffmpeg -i "$TMPDIR/input.avi" -i "$TMPDIR/output.wav" -vcodec copy "$OUTDIR/$name.mpg"
 
-	# Encode video and stream copy the audio for You Tube.
-	# The output should be a similar quality as the input and will hopefully be a more manageable size.
-	#  We might need to use -c:a aac for audio
+    # Encode video and stream copy the audio for You Tube.
+    # The output should be a similar quality as the input and will hopefully be a more manageable size.
+    #  We might need to use -c:a aac for audio
 
-	# bin/ffmpeg -i "$TMPDIR/input.avi" -i "$TMPDIR/output.wav" -c:v libx264 -preset slow -crf 18 -c:a copy -pix_fmt yuv420p "$OUTDIR/$name.mkv"
+    # bin/ffmpeg -i "$TMPDIR/input.avi" -i "$TMPDIR/output.wav" -c:v libx264 -preset slow -crf 18 -c:a copy -pix_fmt yuv420p "$OUTDIR/$name.mkv"
 
     $ECHO bin/ffmpeg -i "$TMPDIR/inp_video.avi" -i "$TMPDIR/out_audio.wav" -s hd720 -c:v libx264 -preset slow -crf 23 -c:a aac -strict -2 "$OUTDIR/$name.mp4"
 
